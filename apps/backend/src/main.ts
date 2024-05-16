@@ -1,39 +1,32 @@
-import express, { Application } from "express";
-import cors from "cors";
-import mongoose from "mongoose";
-import dotenv from "dotenv";
+import express from 'express';
+import cors from 'cors';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
 
 dotenv.config();
 
-const app: Application = express();
-const port: number | string = process.env.PORT || 5000;
+const host = process.env.HOST ?? 'localhost';
+const port = process.env.PORT ? Number(process.env.PORT) : 3000;
+const mongoUrl = process.env.MONGO_URL ?? 'mongodb://localhost:27017/mydatabase';
+
+const app = express();
 
 app.use(cors());
-app.use(express.json());
 
-const url: string | undefined = process.env.ATLAS_URI;
-if (!url) {
-  console.error("MongoDB connection URI not provided");
-  process.exit(1);
-}
-
-mongoose.connect(url, {
+mongoose.connect(mongoUrl, {
   useNewUrlParser: true,
-  useCreateIndex: true,
   useUnifiedTopology: true,
-}).then(() => {
-  console.log("MongoDB connection successful");
-}).catch((error) => {
-  console.error("MongoDB connection error:", error);
-  process.exit(1);
+} as mongoose.ConnectOptions);
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+db.once('open', () => {
+  console.log('Connected to MongoDB');
 });
 
-const connection = mongoose.connection;
-
-connection.once("open", () => {
-  console.log("MongoDB connection successfully");
+app.get('/', (req, res) => {
+  res.send({ message: 'Hello API' });
 });
 
-app.listen(port, () => {
-  console.log(`Server is running on port: ${port}`);
+app.listen(port, host, () => {
+  console.log(`[ ready ] http://${host}:${port}`);
 });
