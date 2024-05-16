@@ -26,6 +26,9 @@ db.once('open', () => {
 const user = require("./routes/user");
 app.use("/user", user);
 
+app.get('/', (req, res) => {
+  res.send({ message: 'Hello API' });
+});
 
 app.listen(port, host, () => {
   console.log(`[ ready ] http://${host}:${port}`);
