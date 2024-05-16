@@ -7,7 +7,10 @@
       "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
       "!{projectRoot}/tsconfig.spec.json",
       "!{projectRoot}/.eslintrc.json",
-      "!{projectRoot}/eslint.config.js"
+      "!{projectRoot}/eslint.config.js",
+      "!{projectRoot}/jest.config.[jt]s",
+      "!{projectRoot}/src/test-setup.[jt]s",
+      "!{projectRoot}/test-setup.[jt]s"
     ],
     "sharedGlobals": []
   },
@@ -33,6 +36,13 @@
       "options": {
         "targetName": "e2e"
       }
+    },
+    {
+      "plugin": "@nx/jest/plugin",
+      "options": {
+        "targetName": "test"
+      },
+      "exclude": ["apps/backend-e2e/**/*"]
     }
   ],
   "generators": {
@@ -52,5 +62,12 @@
       }
     }
   },
-  "nxCloudAccessToken": "ZmQ4NzU0NGYtMDQ0Zi00NjQyLThmN2MtOGE3M2U0YjVhMDlkfHJlYWQtd3JpdGU="
+  "nxCloudAccessToken": "ZmQ4NzU0NGYtMDQ0Zi00NjQyLThmN2MtOGE3M2U0YjVhMDlkfHJlYWQtd3JpdGU=",
+  "targetDefaults": {
+    "@nx/esbuild:esbuild": {
+      "cache": true,
+      "dependsOn": ["^build"],
+      "inputs": ["production", "^production"]
+    }
+  }
 }
