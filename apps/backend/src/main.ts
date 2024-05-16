@@ -7,7 +7,9 @@ dotenv.config();
 
 const host = process.env.HOST ?? 'localhost';
 const port = process.env.PORT ? Number(process.env.PORT) : 3000;
-const mongoUrl = process.env.MONGO_URL ?? 'mongodb+srv://user:user@cluster0.fibcxnv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
+const mongoUrl =
+  process.env.MONGO_URL ??
+  'mongodb+srv://user:user@cluster0.fibcxnv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
 
 const app = express();
 
@@ -23,9 +25,8 @@ db.once('open', () => {
   console.log('Connected to MongoDB');
 });
 
-const user = require("./routes/user");
-app.use("/user", user);
-
+const user = require('./routes/user');
+app.use('/user', user);
 
 app.listen(port, host, () => {
   console.log(`[ ready ] http://${host}:${port}`);
